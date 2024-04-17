@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <label>Title :-</label>
+    <input type="text" id="title" /><br /><br />
+    <label>Ingredients :-</label>
+    <input type="text" id="ingredients" /><br /><br />
+    <label>Instructions :-</label>
+    <input type="text" id="instructions" /><br /><br />
+    <label>cuisine type :-</label>
+    <input type="text" id="cuisinetype" /><br /><br />
+    <button onclick="addRecipe()">AddRecipe</button><br /><br />
+
+    <table border="1" cellspacing="0" cellpadding="10px">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Ingredients</th>
+          <th>Instructions</th>
+          <th>cuisine type</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <script>
+      let list = JSON.parse(localStorage.getItem("list")) || [];
+      let tbody = document.getElementById("tbody");
+
+      let loadData = () => {
+        list.map((val, ind) => {
+          let tr = document.createElement("tr");
+          tr.innerHTML = `
+                          <td>${val.title}</td>
+                          <td>${val.ingredients}</td>
+                          <td>${val.instructions}</td>
+                          <td>${val.cuisinetype}</td>
+                          <td><button onclick="removeData(${ind})">Delete</button></td>
+                          `;
+          tbody.appendChild(tr);
+        });
+      };
+
+      let addRecipe = () => {
+        let title = document.getElementById("title").value;
+        let ingredients = document.getElementById("ingredients").value;
+        let instructions = document.getElementById("instructions").value;
+        let cuisinetype = document.getElementById("cuisinetype").value;
+
+        let data = {
+          title,
+          ingredients,
+          instructions,
+          cuisinetype,
+        };
+        list.push(data);
+
+        localStorage.setItem("list", JSON.stringify(list));
+        location.reload();
+      };
+
+      function removeData(index) {
+        console.log(index);
+        let result = list[index];
+        console.log(result);
+        console.log("deleted success");
+
+        let newlist = list.filter((val) => val.name !== result.name);
+        console.log(newlist);
+
+        localStorage.setItem("list", JSON.stringify(newlist));
+        location.reload();
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>
